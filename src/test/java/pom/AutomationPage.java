@@ -8,7 +8,7 @@ public class AutomationPage extends BasePage{
     //private By pageTitleLocator = By.className("page-title"); --POM
     @FindBy(className = "page-title")
     private WebElement pageTitleLocator;
-    private String titlePage = "Category: automation";
+    private String titlePage = "Category: automation2";
     public AutomationPage(WebDriver driver){
         super(driver);
     }
