@@ -10,20 +10,34 @@ import runner.browser_manager.DriverManager;
 import runner.browser_manager.DriverManagerFactory;
 import runner.browser_manager.DriverType;
 
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Properties;
+import java.util.concurrent.TimeUnit;
+
 public class Hooks {
     private static WebDriver driver;
     private DriverManager driverManager;
     //private static int numberOfCase=0;
-    @Before
-    public void setUp(){
+    @Before("@browser")
+    public void setUp() throws IOException {
+        Properties properties = new Properties();
+        properties.load(new FileReader("src/test/resources/config.properties"));
         //numberOfCase++;
         //System.out.println("se está ejecutando el escenario número: "+numberOfCase);
         driverManager = DriverManagerFactory.getManager(DriverType.CHROME);
         driver = driverManager.getDriver();
-        driver.get("https://imalittletester.com");
+        /* ************************************************************
+
+                              -> Espera Implícita <-
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+
+        ************************************************************ */
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver.get(properties.getProperty("url_base"));
         driver.manage().window().maximize();
     }
-    @After
+    @After("@browser")
     public void tearDown(Scenario scenario){
         //System.out.println("el escenario numero: "+numberOfCase+" se ejecutó");
         if(scenario.isFailed()){
